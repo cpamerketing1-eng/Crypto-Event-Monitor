@@ -23,24 +23,24 @@ jobs:
           python-version: "3.11"
 
       - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install requests feedparser beautifulsoup4 python-dotenv
+        run: pip install requests
 
       - name: Run Binance Monitor
         env:
           BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
           CHANNEL_ID: ${{ secrets.CHANNEL_ID }}
         run: python send_event.py
+
       - name: Run Bitget Monitor
         env:
           BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
           CHANNEL_ID: ${{ secrets.CHANNEL_ID }}
-       run: python .github/workflows/bitget_monitor.py
-      - name: Save updated feed
+        run: python .github/workflows/bitget_monitor.py
+
+      - name: Save updated feeds
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add feed.json bitget_feed.json
-          git diff --cached --quiet || git commit -m "Update Binance event feed"
+          git diff --cached --quiet || git commit -m "Update event feeds"
           git push
